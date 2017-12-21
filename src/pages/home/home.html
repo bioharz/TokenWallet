@@ -1,14 +1,21 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      EthereumWatcher
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+  <div class="initial-message" *ngIf="!watcherProvider.accounts.length">
+
+    <p>
+      This ist just a observer for your Ethereum account.
+    </p>
+
+    <button ion-button full (click)="addPublicAddress()" color="primary">Add Public Address</button>
+
+  </div>
+
 </ion-content>

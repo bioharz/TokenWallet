@@ -7,15 +7,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
-//import { HomePage } from '../pages/home/home';
-import { QrScannerProvider } from '../providers/qr-scanner/qr-scanner';
-
 import { QRScanner } from '@ionic-native/qr-scanner';
+import { WatcherProvider } from '../providers/watcher/watcher';
 
 @NgModule({
   declarations: [
     MyApp,
-    //HomePage
   ],
   imports: [
     BrowserModule,
@@ -28,14 +25,13 @@ import { QRScanner } from '@ionic-native/qr-scanner';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-   // HomePage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    QrScannerProvider,
-    QRScanner
+    QRScanner,
+    WatcherProvider
   ]
 })
 export class AppModule {}
