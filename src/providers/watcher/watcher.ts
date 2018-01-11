@@ -1,33 +1,32 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
-import { Observable } from 'rxjs/Observable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { timeoutWith } from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Storage} from '@ionic/storage';
 import 'rxjs/add/observable/throw';
 
-interface Account {
-  publicKey: string;
+import Web3 from 'web3';
+
+export interface EthAccount {
+  publicKey: number;
   balance?: number
 }
 
 @Injectable()
 export class WatcherProvider {
 
-  public accounts: Account[] = [];
+  public accounts: EthAccount[] = [];
+  web3: any;
 
   constructor(private http: HttpClient, private storage: Storage) {
-
+    this.web3 = new Web3(this.web3);
   }
 
-  addPublicKey(account: Account): void {
-
+  addAccount(account: EthAccount): void {
     this.accounts.push(account);
     this.loadAccounts();
     this.saveAccounts();
   }
 
-  removeAccount(account: Account): void {
+  removeAccount(account: EthAccount): void {
 
     this.accounts.splice(this.accounts.indexOf(account), 1);
     this.loadAccounts();
@@ -39,27 +38,17 @@ export class WatcherProvider {
   }
 
   loadAccounts(): void {
-
     this.storage.get('Accounts').then(accounts => {
-
       if (accounts !== null) {
         this.accounts = accounts;
         this.loadAccounts();
       }
     });
-
   }
 
-  verifyPublicKey(account)/* :Observable<any>*/  {
-
-    return true //TODO
-
-    /*
-    https://ethereum.stackexchange.com/questions/1374/how-can-i-check-if-an-ethereum-address-is-valid
-
-     */
+  verifyAccount(account: EthAccount): boolean {
+    return this.web3.utils.isAddress(account.publicKey);
   }
 
   //TODO: implement reload method
-
 }

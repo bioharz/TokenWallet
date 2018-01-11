@@ -1,13 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {WatcherProvider} from "../../providers/watcher/watcher";
-
-/**
- * Generated class for the AddWatcherAccountPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import {EthAccount, WatcherProvider} from "../../providers/watcher/watcher";
 
 @IonicPage()
 @Component({
@@ -16,12 +9,12 @@ import {WatcherProvider} from "../../providers/watcher/watcher";
 })
 export class AddWatcherAccountPage {
 
-  private publicKey: string;
-  private isValid: boolean = false;
+  private publicKey: number;
   private badAddress: boolean = false;
-  private noInternet: boolean = false;
+  private buttonSpinner: boolean = false; //TODO: may we have to remove this because the next page push is "to fast"
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private watcherProvider: WatcherProvider) {
+
   }
 
   /*
@@ -30,37 +23,16 @@ export class AddWatcherAccountPage {
   }*/
 
   addPublicKey() {
+    this.buttonSpinner = true;
+    let account: EthAccount = {publicKey: this.publicKey};
 
-    this.badAddress = false;
-    this.noInternet = false;
-    this.isValid = true;
-
-    let account = {
-      publicKey: this.publicKey,
-    };
-
-
-    /*
-    this.watcherProvider.verifyPublicKey(account).subscribe((result) => {
-
-      this.isValid = false;
-
-      if (result.success) {
-        this.watcherProvider.addPublicKey(account);
-        this.navCtrl.pop();
-      } else {
-        this.badAddress = true;
-      }
-
-    }, (err) => {
-
-      this.noInternet = true;
-      this.isValid = false;
-
-    });
-    */
-
+    if (this.watcherProvider.verifyAccount(account)) {
+      this.watcherProvider.addAccount(account);
+      this.navCtrl.pop();
+    } else {
+      this.buttonSpinner = false;
+      this.badAddress = true;
+    }
   }
-
 
 }
