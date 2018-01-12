@@ -27,7 +27,7 @@
 
 
   <button ion-button full (click)="addPublicKey()" [disabled]="isValid">Add Public Address
-    <ion-spinner *ngIf="isValid"></ion-spinner>
+    <ion-spinner *ngIf="buttonSpinner"></ion-spinner>
   </button>
 
   <p class="error-message" *ngIf="badAddress">Invalid Ethereum address.</p>

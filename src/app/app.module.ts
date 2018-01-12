@@ -31,7 +31,7 @@ import { WatcherProvider } from '../providers/watcher/watcher';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     QRScanner,
-    WatcherProvider
+    WatcherProvider,
   ]
 })
 export class AppModule {}
