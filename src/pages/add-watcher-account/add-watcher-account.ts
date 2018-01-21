@@ -10,6 +10,7 @@ import {EthAccount, WatcherProvider} from "../../providers/watcher/watcher";
 export class AddWatcherAccountPage {
 
   private publicKey: number;
+  private accountName: string;
   private badAddress: boolean = false;
   private buttonSpinner: boolean = false; //TODO: may we have to remove this because the next page push is "to fast"
 
@@ -17,14 +18,9 @@ export class AddWatcherAccountPage {
 
   }
 
-  /*
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddWatcherAccountPage');
-  }*/
-
   addPublicKey() {
     this.buttonSpinner = true;
-    let account: EthAccount = {publicKey: this.publicKey};
+    let account: EthAccount = {publicKey: this.publicKey, name:this.accountName};
 
     if (this.watcherProvider.verifyAccount(account)) {
       this.watcherProvider.addAccount(account);

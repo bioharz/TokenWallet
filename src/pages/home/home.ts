@@ -14,7 +14,16 @@ export class HomePage {
 
   }
 
+  ionViewDidLoad(): void {
+    this.watcherProvider.loadAccounts();
+  }
+
   addPublicAddress(): void {
     this.navCtrl.push('AddWatcherAccountPage');
   }
+
+  refreshAccounts(refresher): void {
+    this.watcherProvider.fetchDetails(refresher);
+  }
+
 }
