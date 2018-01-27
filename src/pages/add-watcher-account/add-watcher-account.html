@@ -7,8 +7,8 @@
   <ion-list>
     <ion-item>
       <ion-label stacked>Address</ion-label>
-      <ion-input [(ngModel)]="publicKey" placeholder="Ethereum Public Address" type="text"></ion-input>
       <ion-input [(ngModel)]="accountName" placeholder="Account Name" type="text"></ion-input>
+      <ion-input [(ngModel)]="publicKey" placeholder="Ethereum Public Address" type="text"></ion-input>
     </ion-item>
   </ion-list>
   <button ion-button full (click)="addPublicKey()" [disabled]="!accountName || !publicKey">Add Public Address

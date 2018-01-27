@@ -11,20 +11,22 @@ page-home {
   }
 
   .account {
-
     background-color: #f9f9f9;
     text-transform: uppercase;
-
     .balance {
       font-size: 0.7em;
     }
-
   }
 
   .value {
     margin-top: 10px;
     font-size: 1.2em;
     color: map-get($colors, secondary);
+  }
+
+  .firstFetch {
+    margin: auto;
+    width: 100%;
   }
 
 }
