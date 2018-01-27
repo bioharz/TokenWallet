@@ -1,21 +1,50 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>
       EthereumWatcher
     </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="addPublicAddress()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-  <div class="initial-message" *ngIf="!watcherProvider.accounts.length">
-
-    <p>
-      This ist just a observer for your Ethereum account.
-    </p>
-
+  <ion-spinner class="firstFetch" *ngIf="watcherProvider.isFetching && firstFetch" name="crescent"></ion-spinner>
+  <div class="message" *ngIf="!watcherProvider.accounts.length">
+    <p>This is an observer for your Ethereum account.</p>
     <button ion-button full (click)="addPublicAddress()" color="primary">Add Public Address</button>
-
   </div>
 
+  <ion-refresher *ngIf="watcherProvider.accounts.length" (ionRefresh)="refreshAccounts($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list no-lines>
+
+    <ion-item-sliding *ngFor="let account of watcherProvider.accounts">
+
+      <ion-item class="account">
+        <p *ngIf="account.name"><strong>{{account.name}}</strong></p>
+        <p>{{account.publicKey}}</p>
+        <p *ngIf="account.balance" >Balance: {{account.balance}} ETH</p>
+
+      </ion-item>
+      <ion-item-options>
+        <button ion-button icon-only color="danger" (click)="watcherProvider.removeAccount(account)"><ion-icon name="trash"></ion-icon></button>
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+  </ion-list>
+
 </ion-content>
+
+<ion-footer padding>
+
+  <p><strong>Disclaimer:</strong>This application is under development. Please double check your fonds. Displayed prices may not reflect actual prices. Powered by Ethplorer.io</p>
+
+</ion-footer>
