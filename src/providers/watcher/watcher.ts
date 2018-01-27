@@ -6,8 +6,9 @@ import {timeoutWith} from 'rxjs/operators';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import Web3 from 'web3';
-import { EthAccount } from '../../interfaces/ethAccount';
-import { addressInfo } from '../../interfaces/ethPlorerInterfaces';
+import {EthAccount} from '../../interfaces/ethAccount';
+import {addressInfo} from '../../interfaces/ethPlorerInterfaces';
+import {Refresher} from "ionic-angular";
 
 @Injectable()
 export class WatcherProvider {
@@ -17,21 +18,24 @@ export class WatcherProvider {
   public detailsUnavailable: boolean = false;
   private apiPath: string = "https://api.ethplorer.io/";
   private apiKey: string = "freekey";
+  public isFetching: boolean = false;
 
   constructor(private http: HttpClient, private storage: Storage) {
     this.web3 = new Web3(this.web3);
   }
 
   addAccount(account: EthAccount): void {
-    this.accounts.push(account);
-    this.loadAccounts();
-    this.saveAccounts();
+    this.loadAccounts().then(() => {
+      this.accounts.push(account);
+      this.saveAccounts();
+      this.fetchDetails();
+    });
   }
 
   removeAccount(account: EthAccount): void {
 
     this.accounts.splice(this.accounts.indexOf(account), 1);
-    this.loadAccounts();
+    //this.loadAccounts(); //TODO: I'm not really sure if we need this line...
     this.saveAccounts();
   }
 
@@ -39,12 +43,21 @@ export class WatcherProvider {
     this.storage.set('Accounts', this.accounts);
   }
 
-  loadAccounts(): void {
-    this.storage.get('Accounts').then(accounts => {
-      if (accounts !== null) {
-        this.accounts = accounts;
-        this.fetchDetails();
-      }
+  loadAccounts(fetchData?: boolean): Promise<null> {
+
+    return new Promise(resolve => {
+      this.storage.get('Accounts').then(accounts => {
+        if (accounts !== null) {
+          this.accounts = accounts;
+          if (fetchData) {
+            this.fetchDetails();
+          }
+        }
+        resolve();
+      }, reason => {
+        console.warn("failed to load from storage: " + reason);
+        resolve();
+      });
     });
   }
 
@@ -52,40 +65,54 @@ export class WatcherProvider {
     return this.web3.utils.isAddress(account.publicKey);
   }
 
-  fetchDetails(refresher?): void {
+  fetchDetails(refresher?: Refresher): boolean {
+    //TODO: We are working with parallel threats to fetch data. The server has limited capacities.. may we switch to serial fetching...
 
-    this.detailsUnavailable = false;
-    let requests = [];
+    if (!this.isFetching) {
+      this.isFetching = true;
 
-    for (let account of this.accounts) {
-      let request = this.http.get(this.apiPath + 'getAddressInfo/' + account.publicKey + '?apiKey=' + this.apiKey);
-      requests.push(request);
-    }
+      this.detailsUnavailable = false;
+      let requests = [];
 
-    forkJoin(requests).pipe(
-      timeoutWith(5000, Observable.throw(new Error('Failed to fetch details.')))
-    ).subscribe(results => {
+      for (let account of this.accounts) {
+        let request = this.http.get(this.apiPath + 'getAddressInfo/' + account.publicKey + '?apiKey=' + this.apiKey);
+        requests.push(request);
+      }
 
-      results.forEach((result: addressInfo, index) => {
-        this.accounts[index].balance = result.ETH.balance;
+      forkJoin(requests).pipe(
+        timeoutWith(20000, Observable.throw(new Error('Failed to fetch details.')))
+      ).subscribe(results => {
+
+        results.forEach((result: addressInfo, index) => {
+          this.accounts[index].balance = result.ETH.balance;
+        });
+
+        if (typeof(refresher) !== 'undefined') {
+          refresher.complete();
+        }
+
+        this.saveAccounts();
+        this.isFetching = false;
+
+      }, err => {
+
+        this.detailsUnavailable = true;
+
+        if (typeof(refresher) !== 'undefined') {
+          refresher.complete();
+        }
+        this.isFetching = false;
+
       });
 
+      return true;
+    } else {
+      console.log("fetchDetails: Dont stress me, I'm still fetching data...");
       if (typeof(refresher) !== 'undefined') {
         refresher.complete();
+        return false;
       }
-
-      this.saveAccounts();
-
-    }, err => {
-
-      this.detailsUnavailable = true;
-
-      if (typeof(refresher) !== 'undefined') {
-        refresher.complete();
-      }
-
-    });
-
+    }
   }
 
 }
