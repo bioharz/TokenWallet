@@ -1,4 +1,4 @@
-export interface addressInfo {
+export interface AddressInfo {
   address: number //address,
   ETH: {   //ETH specific information
     balance: number //ETH balance

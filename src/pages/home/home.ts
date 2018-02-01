@@ -4,6 +4,8 @@ import {IonicPage} from 'ionic-angular';
 import {WatcherProvider} from "../../providers/watcher/watcher";
 import {AddWatcherAccountPage} from "../add-watcher-account/add-watcher-account";
 import {ToastController} from 'ionic-angular';
+import {TokenOverviewPage} from "../token-overview/token-overview";
+import {EthAccount} from "../../interfaces/ethAccount";
 
 @IonicPage()
 @Component({
@@ -45,6 +47,10 @@ export class HomePage {
       });
       toast.present();
     }
+  }
+
+  pushTokenPage(ethAccount: EthAccount) {
+    this.navCtrl.push(TokenOverviewPage, {ethAccount: ethAccount});
   }
 
 

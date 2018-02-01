@@ -25,12 +25,12 @@
 
   <ion-list no-lines>
 
-    <ion-item-sliding *ngFor="let account of watcherProvider.accounts">
+    <ion-item-sliding *ngFor="let account of watcherProvider.accounts" (click)="pushTokenPage(account)">
 
       <ion-item class="account">
         <p *ngIf="account.name"><strong>{{account.name}}</strong></p>
         <p>{{account.publicKey}}</p>
-        <p *ngIf="account.balance" >Balance: {{account.balance}} ETH</p>
+        <p *ngIf="account.addressInfo && account.addressInfo.ETH.balance" >Balance: {{account.addressInfo.ETH.balance}} ETH</p>
 
       </ion-item>
       <ion-item-options>

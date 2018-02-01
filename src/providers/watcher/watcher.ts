@@ -7,7 +7,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import Web3 from 'web3';
 import {EthAccount} from '../../interfaces/ethAccount';
-import {addressInfo} from '../../interfaces/ethPlorerInterfaces';
+import {AddressInfo} from '../../interfaces/ethPlorerInterfaces';
 import {Refresher} from "ionic-angular";
 
 @Injectable()
@@ -83,8 +83,8 @@ export class WatcherProvider {
         timeoutWith(20000, Observable.throw(new Error('Failed to fetch details.')))
       ).subscribe(results => {
 
-        results.forEach((result: addressInfo, index) => {
-          this.accounts[index].balance = result.ETH.balance;
+        results.forEach((result: AddressInfo, index) => {
+          this.accounts[index].addressInfo = result;
         });
 
         if (typeof(refresher) !== 'undefined') {
