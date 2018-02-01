@@ -9,15 +9,15 @@ import {EthAccount} from "../../interfaces/ethAccount";
 })
 export class TokenOverviewPage {
 
-  private ethAccount:EthAccount;
+  public ethAccount:EthAccount;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     this.ethAccount = this.navParams.get('ethAccount');
+
+    console.log(this.ethAccount);
   }
-
-
 
 }
