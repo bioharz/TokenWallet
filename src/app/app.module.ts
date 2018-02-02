@@ -9,6 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { QRScanner } from '@ionic-native/qr-scanner';
 import { WatcherProvider } from '../providers/watcher/watcher';
+import { UtilsProvider } from '../providers/utils/utils';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { WatcherProvider } from '../providers/watcher/watcher';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     QRScanner,
     WatcherProvider,
+    UtilsProvider,
   ]
 })
 export class AppModule {}

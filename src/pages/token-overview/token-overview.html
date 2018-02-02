@@ -1,29 +1,21 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title>TokenOverview</ion-title>
   </ion-navbar>
-
 </ion-header>
-
 <ion-content padding>
-
-
   <ion-refresher (ionRefresh)="refreshAccounts($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-
   <ion-list no-lines *ngIf="ethAccount">
-
-    <ion-item-sliding  *ngFor="let token of ethAccount.addressInfo.tokens" >
-
+    <ion-item-sliding *ngFor="let token of ethAccount.addressInfo.tokens">
       <ion-item class="account">
         <p *ngIf="token.tokenInfo.name"><strong>{{token.tokenInfo.name}}</strong></p>
-        <p *ngIf="token.balance" >Balance: {{token.balance}}</p>
-
+        <p *ngIf="token.balance">Balance: {{utilsProvider.tokenBalanceCaclulator(token.balance,
+          token.tokenInfo.decimals) | number:'1.0-5'}} {{token.tokenInfo.symbol}}</p>
+        <p *ngIf="token.tokenInfo && token.tokenInfo.price && token.tokenInfo.price.rate">
+          Value: {{utilsProvider.tokenValueCalculator(token.balance, token.tokenInfo.decimals, token.tokenInfo.price.rate)}} $</p>
       </ion-item>
     </ion-item-sliding>
-
   </ion-list>
-
 </ion-content>

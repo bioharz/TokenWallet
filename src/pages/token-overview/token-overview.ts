@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {EthAccount} from "../../interfaces/ethAccount";
+import {UtilsProvider} from "../../providers/utils/utils";
 
 @IonicPage()
 @Component({
@@ -9,15 +10,13 @@ import {EthAccount} from "../../interfaces/ethAccount";
 })
 export class TokenOverviewPage {
 
-  public ethAccount:EthAccount;
+  public ethAccount: EthAccount;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public utilsProvider: UtilsProvider) {
   }
 
   ionViewDidLoad() {
     this.ethAccount = this.navParams.get('ethAccount');
-
-    console.log(this.ethAccount);
   }
 
 }
