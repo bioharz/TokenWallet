@@ -1,32 +1,5 @@
 page-home {
 
-  ion-footer {
-    font-size: 0.7em;
-    color: #474747;
-    background-color: map-get($colors, light);
-  }
 
-  ion-item-sliding {
-    margin-top: 10px;
-  }
-
-  .account {
-    background-color: #f9f9f9;
-    text-transform: uppercase;
-    .balance {
-      font-size: 0.7em;
-    }
-  }
-
-  .value {
-    margin-top: 10px;
-    font-size: 1.2em;
-    color: map-get($colors, secondary);
-  }
-
-  .firstFetch {
-    margin: auto;
-    width: 100%;
-  }
 
 }
