@@ -6,6 +6,7 @@ import {AddWatcherAccountPage} from "../add-watcher-account/add-watcher-account"
 import {ToastController} from 'ionic-angular';
 import {TokenOverviewPage} from "../token-overview/token-overview";
 import {EthAccount} from "../../interfaces/ethAccount";
+import { DecimalPipe } from '@angular/common';
 
 @IonicPage()
 @Component({

@@ -31,6 +31,7 @@
         <p *ngIf="account.name"><strong>{{account.name}}</strong></p>
         <p>{{account.publicKey}}</p>
         <p *ngIf="account.addressInfo && account.addressInfo.ETH.balance" >Balance: {{account.addressInfo.ETH.balance}} ETH</p>
+        <p *ngIf="account.addressInfo && account.addressInfo.ETH.balance &&  watcherProvider.cmcStat && watcherProvider.cmcStat[0] && watcherProvider.cmcStat[0].price_usd" >Value: {{account.addressInfo.ETH.balance * watcherProvider.cmcStat[0].price_usd  | number:'1.0-2'}} $</p>
 
       </ion-item>
       <ion-item-options>
