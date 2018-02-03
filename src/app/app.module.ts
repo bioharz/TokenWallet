@@ -34,6 +34,7 @@ import { UtilsProvider } from '../providers/utils/utils';
     QRScanner,
     WatcherProvider,
     UtilsProvider,
+    QRScanner
   ]
 })
 export class AppModule {}
