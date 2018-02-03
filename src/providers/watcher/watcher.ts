@@ -5,10 +5,12 @@ import {forkJoin} from 'rxjs/observable/forkJoin';
 import {timeoutWith} from 'rxjs/operators';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
 import Web3 from 'web3';
 import {EthAccount} from '../../interfaces/ethAccount';
 import {AddressInfo} from '../../interfaces/ethPlorerInterfaces';
 import {Refresher} from "ionic-angular";
+import {CmcStat} from "../../interfaces/cmcStat";
 
 @Injectable()
 export class WatcherProvider {
@@ -19,6 +21,8 @@ export class WatcherProvider {
   private apiPath: string = "https://api.ethplorer.io/";
   private apiKey: string = "freekey";
   public isFetching: boolean = false;
+  public cmcStat: CmcStat[] = [];
+  private apiPathCMC: string = "https://api.coinmarketcap.com/v1/ticker/";
 
   constructor(private http: HttpClient, private storage: Storage) {
     this.web3 = new Web3(this.web3);
@@ -73,6 +77,10 @@ export class WatcherProvider {
 
       this.detailsUnavailable = false;
       let requests = [];
+
+      this.http.get<CmcStat[]>(this.apiPathCMC + 'ethereum/').subscribe(data => {
+        this.cmcStat = data;
+      });
 
       for (let account of this.accounts) {
         let request = this.http.get(this.apiPath + 'getAddressInfo/' + account.publicKey + '?apiKey=' + this.apiKey);
