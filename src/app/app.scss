@@ -15,11 +15,11 @@
 // automatically applied to the <body> element in the app.
 
 .toolbar-background {
-  background-color: #E87148;
+  background-color: #8dbddc;
 }
 
 .fixed-content{
-  background-color: #474747;
+  background-color: #f2f4e3;
 }
 
 
@@ -35,7 +35,7 @@
 .message {
   margin: 20px;
   padding: 20px;
-  background-color: #cdcdcd;
+  background-color: #eaeaea;
   font-size: 0.8em;
 }
 
@@ -50,7 +50,7 @@ ion-item-sliding {
 }
 
 .account {
-  background-color: #cdcdcd;
+  background-color: #eaeaea;
   text-transform: uppercase;
   .balance {
     font-size: 0.7em;
@@ -68,7 +68,4 @@ ion-item-sliding {
   width: 100%;
 }
 
-.item-md{
-  color: white;
-}
 
