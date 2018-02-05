@@ -1,6 +1,5 @@
 // http://ionicframework.com/docs/theming/
 
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -15,6 +14,14 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+.toolbar-background {
+  background-color: #8dbddc;
+}
+
+.fixed-content{
+  background-color: #f2f4e3;
+}
+
 
 .toolbar-title {
   //font-family: 'Courier New', sans-serif;
@@ -28,11 +35,9 @@
 .message {
   margin: 20px;
   padding: 20px;
-  background-color: map-get($colors, light);
+  background-color: #eaeaea;
   font-size: 0.8em;
 }
-
-
 
 ion-footer {
   font-size: 0.7em;
@@ -45,7 +50,7 @@ ion-item-sliding {
 }
 
 .account {
-  background-color: #f9f9f9;
+  background-color: #eaeaea;
   text-transform: uppercase;
   .balance {
     font-size: 0.7em;
@@ -62,3 +67,5 @@ ion-item-sliding {
   margin: auto;
   width: 100%;
 }
+
+

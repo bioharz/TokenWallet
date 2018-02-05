@@ -6,6 +6,7 @@ import {AddWatcherAccountPage} from "../add-watcher-account/add-watcher-account"
 import {ToastController} from 'ionic-angular';
 import {TokenOverviewPage} from "../token-overview/token-overview";
 import {EthAccount} from "../../interfaces/ethAccount";
+import {SplashScreen} from "@ionic-native/splash-screen";
 import { DecimalPipe } from '@angular/common';
 
 @IonicPage()
@@ -17,7 +18,8 @@ export class HomePage {
 
   private firstFetch: boolean = true; //ugly workaround: We cannot get programmatically access to the refresher...
 
-  constructor(public navCtrl: NavController, private watcherProvider: WatcherProvider, private toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, private watcherProvider: WatcherProvider, private toastCtrl: ToastController, private splashScreen: SplashScreen) {
+     //this.splashScreen.show();
 
   }
 
