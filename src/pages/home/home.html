@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar>
     <ion-title>
       EthereumWatcher
     </ion-title>
@@ -16,7 +16,7 @@
   <ion-spinner class="firstFetch" *ngIf="watcherProvider.isFetching && firstFetch" name="crescent"></ion-spinner>
   <div class="message" *ngIf="!watcherProvider.accounts.length">
     <p>This is an observer for your Ethereum account.</p>
-    <button ion-button full (click)="addPublicAddress()" color="primary">Add Public Address</button>
+    <button  ion-button full (click)="addPublicAddress()" color="primary">Add Public Address</button>
   </div>
 
   <ion-refresher *ngIf="watcherProvider.accounts.length" (ionRefresh)="refreshAccounts($event)">
