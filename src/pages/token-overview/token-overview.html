@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <ion-refresher (ionRefresh)="refreshAccounts($event)">
+  <ion-refresher (ionRefresh)="refreshCurrentAccount($event)" >
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list no-lines *ngIf="ethAccount">

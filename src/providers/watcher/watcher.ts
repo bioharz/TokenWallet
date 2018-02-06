@@ -22,6 +22,7 @@ export class WatcherProvider {
   private apiKey: string = "freekey";
   public isFetching: boolean = false;
   public cmcStat: CmcStat[] = [];
+  public currentAccount: EthAccount[] = [];
   private apiPathCMC: string = "https://api.coinmarketcap.com/v1/ticker/";
 
   constructor(private http: HttpClient, private storage: Storage) {
@@ -80,6 +81,10 @@ export class WatcherProvider {
 
       this.http.get<CmcStat[]>(this.apiPathCMC + 'ethereum/').subscribe(data => {
         this.cmcStat = data;
+      });
+
+      this.http.get<EthAccount[]>(this.apiPath + 'getAddressInfo/').subscribe(data => {
+        this.currentAccount = data;
       });
 
       for (let account of this.accounts) {
