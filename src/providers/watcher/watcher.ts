@@ -22,7 +22,6 @@ export class WatcherProvider {
   private apiKey: string = "freekey";
   public isFetching: boolean = false;
   public cmcStat: CmcStat[] = [];
-  public currentAccount: EthAccount[] = [];
   private apiPathCMC: string = "https://api.coinmarketcap.com/v1/ticker/";
 
   constructor(private http: HttpClient, private storage: Storage) {
@@ -70,7 +69,7 @@ export class WatcherProvider {
     return this.web3.utils.isAddress(account.publicKey);
   }
 
-  fetchDetails(refresher?: Refresher): boolean {
+  fetchDetails(refresher?: Refresher, singleAccount?: EthAccount): boolean {
     //TODO: We are working with parallel threats to fetch data. The server has limited capacities.. may we switch to serial fetching...
 
     if (!this.isFetching) {
@@ -83,42 +82,64 @@ export class WatcherProvider {
         this.cmcStat = data;
       });
 
-      this.http.get<EthAccount[]>(this.apiPath + 'getAddressInfo/').subscribe(data => {
-        this.currentAccount = data;
-      });
 
-      for (let account of this.accounts) {
-        let request = this.http.get(this.apiPath + 'getAddressInfo/' + account.publicKey + '?apiKey=' + this.apiKey);
-        requests.push(request);
-      }
+      if (singleAccount && singleAccount.publicKey !== null) {
+        this.http.get<AddressInfo>(this.apiPath + 'getAddressInfo/' + singleAccount.publicKey + '?apiKey=' + this.apiKey).pipe(
+          timeoutWith(5000, Observable.throw(new Error('Failed to fetch details.')))
+        ).subscribe(data => {
+          singleAccount.addressInfo = data;
 
-      forkJoin(requests).pipe(
-        timeoutWith(20000, Observable.throw(new Error('Failed to fetch details.')))
-      ).subscribe(results => {
+          //TODO refactor this, indexOf account is not very efficient!
 
-        results.forEach((result: AddressInfo, index) => {
-          this.accounts[index].addressInfo = result;
+          let localIndex:number = this.accounts.indexOf(singleAccount);
+          this.accounts[localIndex] = singleAccount;
+
+          this.saveAccounts();
+
+          if (typeof(refresher) !== 'undefined') {
+            refresher.complete();
+          }
+
+          this.isFetching = false;
+          return true;
         });
 
-        if (typeof(refresher) !== 'undefined') {
-          refresher.complete();
+      } else {
+
+
+        for (let account of this.accounts) {
+          let request = this.http.get(this.apiPath + 'getAddressInfo/' + account.publicKey + '?apiKey=' + this.apiKey);
+          requests.push(request);
         }
 
-        this.saveAccounts();
-        this.isFetching = false;
+        forkJoin(requests).pipe(
+          timeoutWith(20000, Observable.throw(new Error('Failed to fetch details.')))
+        ).subscribe(results => {
 
-      }, err => {
+          results.forEach((result: AddressInfo, index) => {
+            this.accounts[index].addressInfo = result;
+          });
 
-        this.detailsUnavailable = true;
+          if (typeof(refresher) !== 'undefined') {
+            refresher.complete();
+          }
 
-        if (typeof(refresher) !== 'undefined') {
-          refresher.complete();
-        }
-        this.isFetching = false;
+          this.saveAccounts();
+          this.isFetching = false;
 
-      });
+        }, err => {
 
-      return true;
+          this.detailsUnavailable = true;
+
+          if (typeof(refresher) !== 'undefined') {
+            refresher.complete();
+          }
+          this.isFetching = false;
+
+        });
+
+        return true;
+      }
     } else {
       console.log("fetchDetails: Dont stress me, I'm still fetching data...");
       if (typeof(refresher) !== 'undefined') {

@@ -20,9 +20,10 @@ export class TokenOverviewPage {
 
   refreshCurrentAccount(refresher): void {
     this.firstFetch = false;
-    let hasFetched: boolean = this.watcherProvider.fetchDetails(refresher);
+    let hasFetched: boolean = this.watcherProvider.fetchDetails(refresher, this.ethAccount);
     if (!hasFetched) {
-      this.toastMessage("I'm still fetching Data, be patient please");
+      //this.toastMessage("I'm still fetching Data, be patient please");
+      //TODO we need some kind of a async promise to solve that...
     }
   }
 
