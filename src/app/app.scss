@@ -15,13 +15,12 @@
 // automatically applied to the <body> element in the app.
 
 .toolbar-background {
-  background-color: #8dbddc;
+  background-color: map-get($colors, primary);
 }
 
 .fixed-content{
-  background-color: #f2f4e3;
+  background-color: map-get($colors, beige);
 }
-
 
 .toolbar-title {
   //font-family: 'Courier New', sans-serif;
